@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Test Cliente SSO</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: 60px auto; padding: 0 20px; }
+    button { padding: 10px 24px; background: #0078d4; color: #fff; border: none; border-radius: 6px; cursor: pointer; font-size: 1rem; }
+    button:hover { background: #106ebe; }
+    pre { background: #f4f4f4; padding: 16px; border-radius: 6px; overflow-x: auto; font-size: 0.85rem; }
+    .badge { display: inline-block; padding: 4px 10px; border-radius: 12px; font-size: 0.8rem; font-weight: bold; }
+    .ok  { background: #d1fae5; color: #065f46; }
+    .err { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body>
+  <h2>Proyecto cliente — Test SSO Fanasa</h2>
+  <p>Simula ser un proyecto cliente que consume el SSO.</p>
+
+  <button onclick="abrirSSO()">Iniciar sesión con SSO</button>
+
+  <div id="resultado" style="margin-top: 24px;"></div>
+
+  <script>
+    const SSO_URL       = 'http://localhost:4200';
+    const SSO_ORIGIN    = 'http://localhost:4200';
+    const MI_REDIRECT   = window.location.href.split('#')[0];
+    const MI_NOMBRE     = 'Proyecto Test';
+
+    function abrirSSO() {
+      const params = new URLSearchParams({
+        redirect_uri: MI_REDIRECT,
+        client_name:  MI_NOMBRE,
+      });
+
+      window.open(
+        `${SSO_URL}/login?${params}`,
+        'fanasa-sso',
+        'width=480,height=620,left=200,top=100'
+      );
+    }
+
+    // Escuchar el token que manda el SSO al cerrar el popup
+    window.addEventListener('message', (event) => {
+      if (event.origin !== SSO_ORIGIN) return;
+      if (event.data?.type !== 'FANASA_SSO_TOKEN') return;
+
+      const { id_token, expires_in } = event.data.payload;
+
+      // Decodificar el JWT para ver los datos del usuario
+      const claims = JSON.parse(atob(id_token.split('.')[1].replace(/-/g,'+').replace(/_/g,'/')));
+
+      document.getElementById('resultado').innerHTML = `
+        <p><span class="badge ok">✅ Token recibido</span></p>
+        <p><strong>Usuario:</strong> ${claims.name || '—'}</p>
+        <p><strong>Email:</strong> ${claims.preferred_username || claims.email || '—'}</p>
+        <p><strong>Expira en:</strong> ${expires_in} segundos</p>
+        <p><strong>JWT (payload):</strong></p>
+        <pre>${JSON.stringify(claims, null, 2)}</pre>
+      `;
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+plugins {
+    id 'com.android.library'
+    id 'org.jetbrains.kotlin.android'
+    id 'maven-publish'            // para publicar en GitHub Packages
+}
+
+android {
+    namespace 'com.fanasa.sso'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = '17'
+    }
+
+    publishing {
+        singleVariant('release') {
+            withSourcesJar()
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.browser:browser:1.8.0'            // Chrome Custom Tab
+    implementation 'androidx.security:security-crypto:1.1.0-alpha06' // Token seguro
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
+}
+
+// ── Publicación en GitHub Packages ──────────────────────────────────────────
+afterEvaluate {
+    publishing {
+        publications {
+            release(MavenPublication) {
+                from components.release
+                groupId    = 'com.fanasa'
+                artifactId = 'sso-android'
+                version    = '1.0.0'
+            }
+        }
+        repositories {
+            maven {
+                name = 'GitHubPackages'
+                url  = uri('https://maven.pkg.github.com/TU-ORG/fanasa-sso-android')
+                credentials {
+                    username = project.findProperty('gpr.user') ?: System.getenv('GITHUB_USERNAME')
+                    password = project.findProperty('gpr.token') ?: System.getenv('GITHUB_TOKEN')
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,54 @@
+<div class="sso-container">
+  <!-- Error de configuración (params faltantes) -->
+  <div *ngIf="error" class="card error-card">
+    <div class="error-icon">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+    </div>
+    <h2>Configuración inválida</h2>
+    <p>{{ error }}</p>
+    <p class="hint">
+      La URL debe incluir los parámetros:<br>
+      <code>?client_id=&amp;tenant_id=&amp;redirect_uri=</code>
+    </p>
+  </div>
+
+  <!-- Pantalla de login normal -->
+  <div *ngIf="!error" class="card login-card">
+    <div class="logo">
+      <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+        <path d="M2 17l10 5 10-5"/>
+        <path d="M2 12l10 5 10-5"/>
+      </svg>
+    </div>
+
+    <h1 class="title">
+      {{ config?.clientName ? config!.clientName : 'Portal Fanasa' }}
+    </h1>
+    <p class="subtitle">Inicia sesión con tu cuenta corporativa</p>
+
+    <button
+      class="btn-microsoft"
+      (click)="login()"
+      [disabled]="loading"
+      type="button"
+    >
+      <span *ngIf="loading" class="spinner"></span>
+      <svg *ngIf="!loading" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 21 21">
+        <rect x="1"  y="1"  width="9" height="9" fill="#F25022"/>
+        <rect x="11" y="1"  width="9" height="9" fill="#7FBA00"/>
+        <rect x="1"  y="11" width="9" height="9" fill="#00A4EF"/>
+        <rect x="11" y="11" width="9" height="9" fill="#FFB900"/>
+      </svg>
+      <span>{{ loading ? 'Conectando...' : 'Continuar con Microsoft' }}</span>
+    </button>
+
+    <p class="footer-text">
+      Al continuar aceptas el uso de tu cuenta de Microsoft organizacional
+    </p>
+  </div>
+</div>

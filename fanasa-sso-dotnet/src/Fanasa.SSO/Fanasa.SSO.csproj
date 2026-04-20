@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <LangVersion>latest</LangVersion>
+
+    <!-- Metadata del paquete NuGet -->
+    <PackageId>Fanasa.SSO</PackageId>
+    <Version>1.0.0</Version>
+    <Authors>Fanasa</Authors>
+    <Description>SDK de autenticación SSO Fanasa para Microsoft Entra ID</Description>
+    <PackageTags>sso;authentication;azure;entra-id;fanasa</PackageTags>
+    <RepositoryUrl>https://github.com/TU-ORG/fanasa-sso-dotnet</RepositoryUrl>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
+    <PackageReference Include="Microsoft.Identity.Web"                        Version="2.18.1" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt"              Version="7.4.0" />
+  </ItemGroup>
+
+</Project>
