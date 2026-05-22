@@ -6,6 +6,7 @@ import { AuthenticationResult } from '@azure/msal-browser';
 import { AuthConfigService } from '../../services/auth-config.service';
 import { TokenDeliveryService } from '../../services/token-delivery.service';
 import { TokenPayload } from '../../models/sso-config.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-auth-callback',
@@ -66,7 +67,7 @@ export class AuthCallbackComponent implements OnInit {
 
       if (!result) {
         // No hay respuesta de Microsoft en esta URL → redirigir al login
-        window.location.href = '/login';
+        window.location.href = environment.baseHref + 'login';
         return;
       }
 

@@ -1,25 +1,74 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <LangVersion>latest</LangVersion>
-
-    <!-- Metadata del paquete NuGet -->
+    <TargetFrameworks>net40;net45;net6.0;net8.0</TargetFrameworks>
     <PackageId>Fanasa.SSO</PackageId>
     <Version>1.0.0</Version>
     <Authors>Fanasa</Authors>
-    <Description>SDK de autenticación SSO Fanasa para Microsoft Entra ID</Description>
-    <PackageTags>sso;authentication;azure;entra-id;fanasa</PackageTags>
-    <RepositoryUrl>https://github.com/TU-ORG/fanasa-sso-dotnet</RepositoryUrl>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>SDK de autenticación SSO Fanasa para Microsoft Entra ID. Compatible con .NET 4.0 a .NET 8, ASP.NET MVC, Web Forms, Blazor y APIs REST.</Description>
+    <PackageTags>sso;authentication;azure;entra-id;fanasa;aspnet;aspnetcore;mvc;webforms;blazor</PackageTags>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <AssemblyName>Fanasa.SSO</AssemblyName>
+    <RootNamespace>Fanasa.SSO</RootNamespace>
   </PropertyGroup>
 
+  <!-- ─── .NET 4.x: C# 7.3, sin nullable refs ──────────────────────────── -->
+  <PropertyGroup Condition="$(TargetFramework.StartsWith('net4'))">
+    <LangVersion>7.3</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- ─── .NET 6 / 8: C# moderno ────────────────────────────────────────── -->
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net6.0' Or '$(TargetFramework)' == 'net8.0'">
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- ─── JavaScript embebido (va dentro del DLL) ───────────────────────── -->
   <ItemGroup>
+    <EmbeddedResource Include="Resources\fanasa-sso.js" />
+  </ItemGroup>
+
+  <!-- ─── En .NET 4.x: excluir carpetas que son solo para ASP.NET Core ──── -->
+  <ItemGroup Condition="$(TargetFramework.StartsWith('net4'))">
+    <Compile Remove="AspNetCore\**\*.cs" />
+    <Compile Remove="Models\**\*.cs" />
+    <Compile Remove="Extensions\**\*.cs" />
+  </ItemGroup>
+
+  <!-- ─── En .NET 6/8: excluir carpetas que son solo para System.Web ─────── -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0' Or '$(TargetFramework)' == 'net8.0'">
+    <Compile Remove="AspNet\**\*.cs" />
+  </ItemGroup>
+
+  <!-- ─── Dependencias .NET 4.0 ──────────────────────────────────────────── -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net40'">
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+  </ItemGroup>
+
+  <!-- ─── Dependencias .NET 4.5 ──────────────────────────────────────────── -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net45'">
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" PrivateAssets="all" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="5.7.0" />
+  </ItemGroup>
+
+  <!-- ─── Dependencias .NET 6 ───────────────────────────────────────────── -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net6.0'">
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.36" />
+    <PackageReference Include="Microsoft.Identity.Web"                        Version="1.25.3" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt"              Version="6.35.0" />
+  </ItemGroup>
+
+  <!-- ─── Dependencias .NET 8 ───────────────────────────────────────────── -->
+  <ItemGroup Condition="'$(TargetFramework)' == 'net8.0'">
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.Identity.Web"                        Version="2.18.1" />
-    <PackageReference Include="System.IdentityModel.Tokens.Jwt"              Version="7.4.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt"              Version="7.5.1" />
   </ItemGroup>
 
 </Project>

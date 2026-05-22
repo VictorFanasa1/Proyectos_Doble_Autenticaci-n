@@ -1,15 +1,10 @@
-namespace Fanasa.SSO.Models;
+// Este archivo se mantiene por compatibilidad de namespace público.
+// La implementación real está en Core/SsoOptions.cs
+// En proyectos net6/net8 puedes usar cualquiera de los dos namespaces.
+using Fanasa.SSO.Core;
 
-public class SsoOptions
+namespace Fanasa.SSO.Models
 {
-    public const string Section = "FanasaSSO";
-
-    /// <summary>Client ID del App Registration en Azure AD</summary>
-    public string ClientId { get; set; } = string.Empty;
-
-    /// <summary>Tenant ID de Azure AD</summary>
-    public string TenantId { get; set; } = string.Empty;
-
-    /// <summary>Audiences válidas para el token (por defecto = ClientId)</summary>
-    public IEnumerable<string>? ValidAudiences { get; set; }
+    /// <inheritdoc cref="Core.SsoOptions"/>
+    public class SsoOptions : Core.SsoOptions { }
 }

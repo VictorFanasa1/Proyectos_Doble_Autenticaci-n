@@ -24,6 +24,16 @@ export class LoginComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Fallback defensivo:
+    // si Microsoft regresó por error a /login con code/hash de OAuth,
+    // reenviar al callback real para que se haga el canje y la entrega al consumer.
+    if (this.hasAuthResponseInUrl()) {
+      window.location.replace(
+        `${environment.baseHref}auth/callback${window.location.search}${window.location.hash}`
+      );
+      return;
+    }
+
     const queryParams = this.route.snapshot.queryParamMap;
 
     try {
@@ -44,16 +54,25 @@ export class LoginComponent implements OnInit {
 
     try {
       await this.msalService.instance.loginRedirect({
-        scopes: ['openid', 'profile'],
-        // ⚠️ Aquí va la URL del SSO, NO la del cliente.
-        // Microsoft mandará el auth code de vuelta al SSO.
-        // El SSO luego redirige al cliente con el token.
-        redirectUri: `${window.location.origin}${environment.baseHref}auth/callback`,
+        scopes:      ['openid', 'profile'],
+        redirectUri: environment.redirectUri,   // definido en environment.ts / environment.prod.ts
       });
     } catch (e: any) {
       this.error   = 'Error al iniciar sesión con Microsoft. Por favor intenta de nuevo.';
       this.loading = false;
       console.error('[SSO] loginRedirect error:', e);
     }
+  }
+
+  private hasAuthResponseInUrl(): boolean {
+    const hash = window.location.hash.startsWith('#')
+      ? window.location.hash.slice(1)
+      : window.location.hash;
+    const query = window.location.search.startsWith('?')
+      ? window.location.search.slice(1)
+      : window.location.search;
+
+    const authPattern = /(?:^|[&])(code|id_token|access_token|error)=/;
+    return authPattern.test(hash) || authPattern.test(query);
   }
 }

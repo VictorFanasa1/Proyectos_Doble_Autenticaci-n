@@ -1,6 +1,12 @@
 export interface FanasaSSOConfig {
-  /** URL donde está desplegado el SSO. Ej: 'https://sso.fanasa.com' */
+  /** URL donde está desplegado el SSO. Ej: 'https://aplicacion.fanasa.com/SSO' */
   ssoUrl: string;
+  /**
+   * URL de tu proyecto a donde el SSO regresará tras autenticar.
+   * Debe estar registrada en Azure AD.
+   * Ej: 'https://mi-proyecto.fanasa.com'
+   */
+  redirectUri: string;
   /** Nombre de tu app (aparece en la pantalla de login). Opcional. */
   clientName?: string;
   /** Tamaño del popup. Por defecto 480x620. */

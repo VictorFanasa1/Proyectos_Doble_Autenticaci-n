@@ -11,7 +11,7 @@ export class FanasaSSO {
       clientName: '',
       popup: { width: 480, height: 620 },
       ...config,
-      ssoUrl: config.ssoUrl.replace(/\/$/, ''), // quitar slash final
+      ssoUrl: config.ssoUrl.replace(/\/$/, ''),
     };
   }
 
@@ -19,12 +19,10 @@ export class FanasaSSO {
 
   /**
    * Abre el SSO en un popup y devuelve el token cuando el usuario se autentica.
-   *
-   * @param redirectUri  URL de tu app a donde regresará el SSO tras autenticar.
-   *                     Por defecto usa window.location.href (la página actual).
+   * Usa el redirectUri del config por defecto.
    */
   loginPopup(redirectUri?: string): Promise<SSOToken> {
-    const uri = redirectUri || window.location.href.split('#')[0];
+    const uri = redirectUri || this.config.redirectUri;
 
     return new Promise((resolve, reject) => {
       const popup = this.openPopup(uri);
@@ -66,7 +64,7 @@ export class FanasaSSO {
    * Llama a handleRedirectCallback() en la página de regreso.
    */
   loginRedirect(redirectUri?: string): void {
-    const uri = redirectUri || window.location.href.split('#')[0];
+    const uri = redirectUri || this.config.redirectUri;
     window.location.href = this.buildLoginUrl(uri);
   }
 

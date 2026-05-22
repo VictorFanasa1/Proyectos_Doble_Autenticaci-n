@@ -1,0 +1,41 @@
+# Markdown
+*.md
+
+# Variables de entorno
+.env
+.env.*
+*.env
+
+# Herramientas internas
+.claude/
+
+# Node
+node_modules/
+npm-debug.log
+yarn-error.log
+*.tgz
+
+# .NET build artifacts
+bin/
+obj/
+nupkg/
+*.user
+*.suo
+
+# Visual Studio
+.vs/
+*.vspscc
+*.vssscc
+
+# Angular
+/dist
+/tmp
+/out-tsc
+/.angular/cache
+
+# IDEs
+.idea/
+.vscode/
+.history/
+.DS_Store
+Thumbs.db

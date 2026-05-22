@@ -1,6 +1,6 @@
 {
   "name": "@fanasa/sso",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Cliente SSO de Fanasa para Angular, React y cualquier proyecto JS/TS",
   "author": "Fanasa",
   "license": "UNLICENSED",
@@ -10,23 +10,23 @@
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
-      "types":   "./dist/index.d.ts",
-      "import":  "./dist/index.mjs",
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
     "./angular": {
-      "types":   "./dist/adapters/angular/index.d.ts",
-      "import":  "./dist/adapters/angular/index.mjs",
+      "types": "./dist/adapters/angular/index.d.ts",
+      "import": "./dist/adapters/angular/index.mjs",
       "require": "./dist/adapters/angular/index.js"
     },
     "./angular-legacy": {
-      "types":   "./dist/adapters/angular-legacy/index.d.ts",
-      "import":  "./dist/adapters/angular-legacy/index.mjs",
+      "types": "./dist/adapters/angular-legacy/index.d.ts",
+      "import": "./dist/adapters/angular-legacy/index.mjs",
       "require": "./dist/adapters/angular-legacy/index.js"
     },
     "./react": {
-      "types":   "./dist/adapters/react/index.d.ts",
-      "import":  "./dist/adapters/react/index.mjs",
+      "types": "./dist/adapters/react/index.d.ts",
+      "import": "./dist/adapters/react/index.mjs",
       "require": "./dist/adapters/react/index.js"
     }
   },
@@ -40,20 +40,24 @@
   },
   "devDependencies": {
     "@angular/common": "^15.2.10",
-    "@angular/core":   "^15.2.10",
+    "@angular/core": "^15.2.10",
     "@angular/router": "^15.2.10",
-    "@types/node":     "^20.0.0",
-    "@types/react":    "^18.3.28",
-    "react":           "^18.3.1",
-    "tsup":            "^8.0.0",
-    "typescript":      "^5.0.0"
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.28",
+    "react": "^18.3.1",
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0"
   },
   "peerDependencies": {
     "@angular/core": ">=8.0.0",
-    "react":         ">=17.0.0"
+    "react": ">=17.0.0"
   },
   "peerDependenciesMeta": {
-    "@angular/core": { "optional": true },
-    "react":         { "optional": true }
+    "@angular/core": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    }
   }
 }
