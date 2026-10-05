@@ -1,13 +1,43 @@
-# Markdown
+# Markdown / documentación
 *.md
+*.mdx
+*.mdc
+docs/
+*.pdf
+*.doc
+*.docx
 
 # Variables de entorno
 .env
 .env.*
 *.env
 
-# Herramientas internas
+# Secretos de configuración (usar appsettings.example.json como plantilla)
+fanasa-sso-adapi/appsettings.json
+fanasa-sso-adapi/appsettings.*.json
+!fanasa-sso-adapi/appsettings.example.json
+
+# IA / herramientas internas
 .claude/
+.cursor/
+.cursorrules
+.cursorignore
+.windsurf/
+.windsurfrules
+.aider*
+.continue/
+.gemini/
+.codeium/
+.copilot/
+.github/copilot-instructions.md
+.github/instructions/
+.github/prompts/
+
+# Paquetes compilados / publicaciones
+*.nupkg
+*.zip
+fanasa-sso-dotnet/Fanasa.SSO-*/
+**/Properties/PublishProfiles/
 
 # Node
 node_modules/

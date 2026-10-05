@@ -18,5 +18,20 @@ namespace Fanasa.SSO.Core
 
         /// <summary>Audiences válidas. Por defecto se usa ClientId.</summary>
         public string[] ValidAudiences { get; set; } = null;
+
+        /// <summary>Configuración de Active Directory para enriquecer el usuario con datos adicionales (opcional).</summary>
+        public AdOptions Ad { get; set; } = null;
+    }
+
+    public class AdOptions
+    {
+        /// <summary>LDAP path del dominio. Ej: LDAP://gf.grupofarmacos.net/DC=gf,DC=grupofarmacos,DC=net</summary>
+        public string LdapPath { get; set; } = string.Empty;
+
+        /// <summary>Cuenta de servicio para conectarse a AD.</summary>
+        public string ServiceAccount { get; set; } = string.Empty;
+
+        /// <summary>Password de la cuenta de servicio.</summary>
+        public string ServicePassword { get; set; } = string.Empty;
     }
 }

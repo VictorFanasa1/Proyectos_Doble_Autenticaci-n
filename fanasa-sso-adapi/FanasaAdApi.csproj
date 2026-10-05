@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>FanasaAdApi</AssemblyName>
+    <RootNamespace>FanasaAdApi</RootNamespace>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.DirectoryServices"                        Version="5.0.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore"                         Version="6.2.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer"  Version="5.0.17" />
+  </ItemGroup>
+
+</Project>

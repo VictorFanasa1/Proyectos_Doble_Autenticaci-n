@@ -15,7 +15,7 @@ import type { Provider, ModuleWithProviders, Type } from '@angular/core';
 import { InjectionToken } from '@angular/core';
 
 import { FanasaSSO } from '../../core/FanasaSSO';
-import type { FanasaSSOConfig, SSOToken, SSOUser } from '../../core/types';
+import type { FanasaSSOConfig, SSOToken, SSOUser, AdInfo } from '../../core/types';
 
 // ─── Token de inyección ───────────────────────────────────────────────────────
 
@@ -48,10 +48,11 @@ export class FanasaSSOService {
     return this.sso.handleRedirectCallback();
   }
 
-  isAuthenticated(): boolean  { return this.sso.isAuthenticated(); }
-  getToken(): SSOToken | null { return this.sso.getToken(); }
-  getUser(): SSOUser | null   { return this.sso.getUser(); }
-  logout(): void              { this.sso.logout(); }
+  isAuthenticated(): boolean       { return this.sso.isAuthenticated(); }
+  getToken(): SSOToken | null      { return this.sso.getToken(); }
+  getUser(): SSOUser | null        { return this.sso.getUser(); }
+  getAdInfo(): Promise<AdInfo | null> { return this.sso.getAdInfo(); }
+  logout(): void                   { this.sso.logout(); }
 }
 
 // ─── Guard — clase con canActivate() (Angular 8-13) ──────────────────────────
@@ -109,4 +110,4 @@ export const FanasaSSOModule = {
 
 // ─── Re-exportar tipos ────────────────────────────────────────────────────────
 
-export type { FanasaSSOConfig, SSOToken, SSOUser };
+export type { FanasaSSOConfig, SSOToken, SSOUser, AdInfo };

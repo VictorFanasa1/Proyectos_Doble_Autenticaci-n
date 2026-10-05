@@ -19,14 +19,35 @@ export interface SSOToken {
   tokenType: string;
   expiresAt: number;   // timestamp en ms
   scope: string;
+  adInfo?: AdInfo;
 }
 
 export interface SSOUser {
-  name: string;
-  email: string;
-  objectId: string;    // oid en Azure AD
-  tenantId: string;    // tid en Azure AD
-  raw: Record<string, any>;
+  name: string;              // Nombre completo (claim: name)
+  givenName: string;         // Nombre de pila (claim: given_name)
+  familyName: string;        // Apellido (claim: family_name)
+  email: string;             // Correo / UPN (claim: preferred_username)
+  username: string;          // Nombre de usuario (claim: unique_name)
+  objectId: string;          // OID único en Azure AD (claim: oid)
+  tenantId: string;          // Tenant de la organización (claim: tid)
+  roles: string[];           // Roles asignados en Azure AD (claim: roles)
+  raw: Record<string, any>;  // Todos los claims sin filtrar
+}
+
+export interface AdInfo {
+  // Active Directory (LDAP)
+  employeeNumber: string | null;
+  area:           string | null;
+  manager:        string | null;
+  // Microsoft Graph
+  displayName:    string | null;
+  givenName:      string | null;
+  familyName:     string | null;
+  mail:           string | null;
+  department:     string | null;
+  jobTitle:       string | null;
+  mobilePhone:    string | null;
+  officeLocation: string | null;
 }
 
 /** Mensaje que llega por postMessage desde el popup del SSO */
@@ -38,5 +59,16 @@ export interface SSOMessage {
     token_type: string;
     expires_in: number;
     scope: string;
+    employee_number?: string;
+    area?: string;
+    manager?: string;
+    display_name?: string;
+    given_name?: string;
+    family_name?: string;
+    mail?: string;
+    department?: string;
+    job_title?: string;
+    mobile_phone?: string;
+    office_location?: string;
   };
 }

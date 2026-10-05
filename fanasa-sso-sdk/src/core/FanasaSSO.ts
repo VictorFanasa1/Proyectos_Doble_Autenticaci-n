@@ -1,4 +1,4 @@
-import { FanasaSSOConfig, SSOToken, SSOUser, SSOMessage } from './types';
+import { FanasaSSOConfig, SSOToken, SSOUser, SSOMessage, AdInfo } from './types';
 
 const TOKEN_KEY    = 'fanasa_sso_token';
 const POPUP_NAME   = 'FanasaSSO';
@@ -83,11 +83,22 @@ export class FanasaSSO {
     if (!idToken) return null;
 
     const token = this.buildToken({
-      id_token:     idToken,
-      access_token: params.get('access_token') || undefined,
-      token_type:   params.get('token_type')   || 'Bearer',
-      expires_in:   Number(params.get('expires_in') || 3600),
-      scope:        params.get('scope')         || 'openid profile',
+      id_token:        idToken,
+      access_token:    params.get('access_token')    || undefined,
+      token_type:      params.get('token_type')      || 'Bearer',
+      expires_in:      Number(params.get('expires_in') || 3600),
+      scope:           params.get('scope')            || 'openid profile',
+      employee_number: params.get('employee_number') || undefined,
+      area:            params.get('area')            || undefined,
+      manager:         params.get('manager')         || undefined,
+      job_title:       params.get('job_title')       || undefined,
+      display_name:    params.get('display_name')    || undefined,
+      given_name:      params.get('given_name')      || undefined,
+      family_name:     params.get('family_name')     || undefined,
+      mail:            params.get('mail')            || undefined,
+      department:      params.get('department')      || undefined,
+      mobile_phone:    params.get('mobile_phone')    || undefined,
+      office_location: params.get('office_location') || undefined,
     });
 
     this.saveToken(token);
@@ -121,10 +132,14 @@ export class FanasaSSO {
     try {
       const raw = this.decodeJwt(token.idToken);
       return {
-        name:     raw['name']               || '',
-        email:    raw['preferred_username'] || raw['email'] || '',
-        objectId: raw['oid']  || '',
-        tenantId: raw['tid']  || '',
+        name:       raw['name']               || '',
+        givenName:  raw['given_name']         || '',
+        familyName: raw['family_name']        || '',
+        email:      raw['preferred_username'] || raw['email'] || '',
+        username:   raw['unique_name']        || raw['preferred_username'] || '',
+        objectId:   raw['oid']  || '',
+        tenantId:   raw['tid']  || '',
+        roles:      Array.isArray(raw['roles']) ? raw['roles'] : [],
         raw,
       };
     } catch {
@@ -134,6 +149,27 @@ export class FanasaSSO {
 
   logout(): void {
     sessionStorage.removeItem(TOKEN_KEY);
+  }
+
+  /**
+   * Devuelve datos de Active Directory del usuario autenticado.
+   *
+   * Los datos son inyectados por el SSO server en el momento del login
+   * (el SSO llama a tu backend AD y los incluye en el token).
+   * No requiere llamadas extra desde el cliente.
+   *
+   * Uso:
+   *   const adInfo = await sso.getAdInfo();
+   *   console.log(adInfo?.employeeNumber); // número de empleado
+   */
+  async getAdInfo(): Promise<AdInfo | null> {
+    const token = this.getToken();
+    if (!token) return null;
+
+    // Si el SSO ya enriqueció el token con datos de AD, usarlos directamente
+    if (token.adInfo) return token.adInfo;
+
+    return null;
   }
 
   // ─── PRIVADOS ─────────────────────────────────────────────────────────────
@@ -157,12 +193,27 @@ export class FanasaSSO {
   }
 
   private buildToken(payload: SSOMessage['payload']): SSOToken {
+    const hasAd = payload.employee_number || payload.area || payload.manager
+               || payload.job_title || payload.given_name || payload.department;
     return {
       idToken:     payload.id_token,
       accessToken: payload.access_token,
       tokenType:   payload.token_type,
       expiresAt:   Date.now() + payload.expires_in * 1000,
       scope:       payload.scope,
+      adInfo: hasAd ? {
+        employeeNumber: payload.employee_number  ?? null,
+        area:           payload.area             ?? null,
+        manager:        payload.manager          ?? null,
+        displayName:    payload.display_name     ?? null,
+        givenName:      payload.given_name       ?? null,
+        familyName:     payload.family_name      ?? null,
+        mail:           payload.mail             ?? null,
+        department:     payload.department       ?? null,
+        jobTitle:       payload.job_title        ?? null,
+        mobilePhone:    payload.mobile_phone     ?? null,
+        officeLocation: payload.office_location  ?? null,
+      } : undefined,
     };
   }
 

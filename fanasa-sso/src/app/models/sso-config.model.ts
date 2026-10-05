@@ -9,6 +9,19 @@ export interface TokenPayload {
   token_type: string;
   expires_in: number;
   scope: string;
+  // Active Directory (LDAP)
+  employee_number?: string;
+  area?: string;
+  manager?: string;
+  // Microsoft Graph
+  display_name?: string;
+  given_name?: string;
+  family_name?: string;
+  mail?: string;
+  department?: string;
+  job_title?: string;
+  mobile_phone?: string;
+  office_location?: string;
 }
 
 /**

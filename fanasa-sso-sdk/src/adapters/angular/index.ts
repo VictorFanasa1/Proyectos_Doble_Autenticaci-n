@@ -12,7 +12,7 @@ import { InjectionToken } from '@angular/core';
 import type { CanActivateFn } from '@angular/router';
 
 import { FanasaSSO } from '../../core/FanasaSSO';
-import { FanasaSSOConfig, SSOToken, SSOUser } from '../../core/types';
+import { FanasaSSOConfig, SSOToken, SSOUser, AdInfo } from '../../core/types';
 
 // ─── Token de inyección ───────────────────────────────────────────────────────
 
@@ -48,10 +48,11 @@ export class FanasaSSOService {
     return this.sso.handleRedirectCallback();
   }
 
-  isAuthenticated(): boolean  { return this.sso.isAuthenticated(); }
-  getToken(): SSOToken | null { return this.sso.getToken(); }
-  getUser(): SSOUser | null   { return this.sso.getUser(); }
-  logout(): void              { this.sso.logout(); }
+  isAuthenticated(): boolean          { return this.sso.isAuthenticated(); }
+  getToken(): SSOToken | null         { return this.sso.getToken(); }
+  getUser(): SSOUser | null           { return this.sso.getUser(); }
+  getAdInfo(): Promise<AdInfo | null> { return this.sso.getAdInfo(); }
+  logout(): void                      { this.sso.logout(); }
 }
 
 // ─── Provider factory ─────────────────────────────────────────────────────────
@@ -86,4 +87,4 @@ export function fanasaSSOGuard(config: FanasaSSOConfig): CanActivateFn {
 
 // ─── Re-exportar tipos ────────────────────────────────────────────────────────
 
-export type { FanasaSSOConfig, SSOToken, SSOUser };
+export type { FanasaSSOConfig, SSOToken, SSOUser, AdInfo };

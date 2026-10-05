@@ -47,9 +47,18 @@ export class TokenDeliveryService {
       expires_in: String(payload.expires_in),
       scope:      payload.scope,
     });
-    if (payload.access_token) {
-      params.set('access_token', payload.access_token);
-    }
+    if (payload.access_token)    params.set('access_token',    payload.access_token);
+    if (payload.employee_number) params.set('employee_number', payload.employee_number);
+    if (payload.area)            params.set('area',            payload.area);
+    if (payload.manager)         params.set('manager',         payload.manager);
+    if (payload.job_title)       params.set('job_title',       payload.job_title);
+    if (payload.display_name)    params.set('display_name',    payload.display_name);
+    if (payload.given_name)      params.set('given_name',      payload.given_name);
+    if (payload.family_name)     params.set('family_name',     payload.family_name);
+    if (payload.mail)            params.set('mail',            payload.mail);
+    if (payload.department)      params.set('department',      payload.department);
+    if (payload.mobile_phone)    params.set('mobile_phone',    payload.mobile_phone);
+    if (payload.office_location) params.set('office_location', payload.office_location);
     window.location.href = `${redirectUri}#${params.toString()}`;
   }
 }

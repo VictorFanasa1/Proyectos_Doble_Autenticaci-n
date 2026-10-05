@@ -55,9 +55,19 @@ export class LoginComponent implements OnInit {
     try {
       await this.msalService.instance.loginRedirect({
         scopes:      ['openid', 'profile'],
-        redirectUri: environment.redirectUri,   // definido en environment.ts / environment.prod.ts
+        redirectUri: environment.redirectUri,
       });
     } catch (e: any) {
+      // Si hay una interacción atorada, limpiarla y reintentar automáticamente
+      if (e?.errorCode === 'interaction_in_progress') {
+        this.msalService.instance.clearCache();
+        sessionStorage.clear();
+        await this.msalService.instance.loginRedirect({
+          scopes:      ['openid', 'profile'],
+          redirectUri: environment.redirectUri,
+        });
+        return;
+      }
       this.error   = 'Error al iniciar sesión con Microsoft. Por favor intenta de nuevo.';
       this.loading = false;
       console.error('[SSO] loginRedirect error:', e);
